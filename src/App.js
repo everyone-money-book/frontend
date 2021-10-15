@@ -50,6 +50,7 @@ import { getCookie, setCookie } from "./shared/Cookie";
 
 function App() {
 
+  const is_local = localStorage.getItem("MY_TOKEN") ? true : false;
   console.log('>>>', localStorage.getItem('X-AUTH-TOKEN'))
 
   return (

@@ -24,7 +24,7 @@ instance.interceptors.request.use(function (config) {
 
 export const apis = {
   // 게시물 불러오기
-  //   getPost: () => instance.get('/posts'),
+  getPost: (id) => instance.get('/posts', id),
   // 게시물 작성하기
   createContents: (contents) => instance.post("/api/records", contents),
   // 게시물 수정하기

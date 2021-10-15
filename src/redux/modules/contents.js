@@ -141,10 +141,12 @@ import { apis } from "../../lib/axios";
 // const UPDATE = "contents/UPDATE";
 // const DELETE = "contents/DELETE";
 
+const GET = "GET";
 const CREATE = "CREATE";
 const UPDATE = "UPDATE";
 const DELETE = "DELETE";
 
+const getCalendar = createAction(GET, (post_list) => ({post_list}));
 const createContents = createAction(CREATE, (contents) => ({ contents }));
 const updateContents = createAction(UPDATE, (updateData, contents_index) => ({
   updateData,
@@ -229,11 +231,36 @@ const initialState = {
 // }));
 // const updatePost = createAction(UPDATE, (updateData) => ({ updateData }));
 
+
+
+
 //미들웨어
-
-
 // 불러오기
-// const
+// const getContentsAPI = (date) => {
+//   return function (dispatch, getState, {history}) {
+//       apis
+//           .getPost({
+//               params: {
+//                   date: date
+//               }
+//           })
+//           .then((res) => {
+//               if(res.status >= 400){
+//                   showError(res.status,res.data.msg);
+//                   history.push('/error');
+//                   return;
+//               }
+//               const _post_list = res
+//               console.log("리스폰스", _post_list);
+//               const post_list = res.data;
+//               console.log("리스폰스데이터", post_list);
+//               dispatch(setContent(post_list));
+//           })
+//           .catch((err) => {
+//               console.log("로드에러", err)
+//           })
+//       }
+// };
 
 
 //추가
@@ -398,6 +425,7 @@ export default handleActions(
 );
 
 const contentsActions = {
+  // getContentsAPI,
   createContentsAPI,
   createContents,
   updateContents,

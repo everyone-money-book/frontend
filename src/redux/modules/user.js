@@ -210,13 +210,38 @@ const signUpAPI = (username, password, sex, age, job, salary) => {
 		apis
 			.signUp(data)
 			.then((res) => {
-				history.push('/login');
+        console.log("회원가입 성공");
+        window.alert("회원가입 성공");
+        //로그인 화면으로 이동
+        history.push("/login");
 			})
 			.catch((err) => {
-				window.alert('이미 존재하는 아이디 또는 이메일입니다.');
+        console.log("회원가입 실패");
+        window.alert("회원가입 실패");
+        console.log(err.code, err.message);
 			});
 	};
 };
+
+
+
+// 로그인 체크
+const loginCheckAPI = () => {
+  return function (dispatch, getState, { history }) {
+    const _token = localStorage.getItem('X-AUTH-TOKEN');
+    apis.getUserInfo().then((res) => {
+      console.log("헤더에 토큰있으면 불러오는 데이터: ", res);
+      dispatch(
+        setLogin({
+          id: res.data.user.email,
+          nickname: res.data.user.nickname,
+        })
+      );
+    });
+  };
+};
+
+
 
 
 // 로그인
@@ -228,44 +253,31 @@ const setLoginDB = (username, password) => {
 			.then((res) => {
         console.log(res)
 				localStorage.setItem('X-AUTH-TOKEN', res.data.object);
-        let user = {username, password}
-				dispatch(setLogin({ user }));
-        window.alert('로그인 되었습니다!');
-        history.replace('/');
+        // 리덕스에 유저정보 저장
+				dispatch(loginCheckAPI());
+        history.push('/');
+        console.log(localStorage.getItem("My_INFO"));
 			})
 			.catch((err) => {
-				window.alert('없는 회원정보 입니다! 회원가입을 해주세요!');
+        console.log(err.code, err.message);
+				window.alert('로그인에 실패하였습니다!');
 			});
 	};
 };
 
 
 
-
-
-
-
-
-const logOutDB = () => {
-	return function (dispatch, getState, { history }) {
-		deleteCookie('token');
-		localStorage.removeItem('username');
-		dispatch(logOut());
-		history.replace('/login');
-	};
+// 로그아웃
+const logoutAPI = () => {
+  return function (dispatch, getState, { history }) {
+    localStorage.removeItem("MY_TOKEN");
+    dispatch(logOut());
+    history.replace("/");
+  };
 };
 
 
-const isLogin  = () => {
-	return function (dispatch, getState, { history }) {
-		const token = localStorage.getItem('X-AUTH-TOKEN');
-    if (!token) {
-      return false;
-		} 
-    let user = token
-    dispatch(setLogin(user))
-	};
-};
+
 
 // const userInfoDB = () => {
 // 	return function (dispatch, getState, { history }) {
@@ -305,9 +317,8 @@ export default handleActions(
 const actionCreators = {
   signUpAPI,
 	setLoginDB,
-	logOutDB,
-	isLogin
-
+	logoutAPI,
+  loginCheckAPI
 };
 
 export { actionCreators };
