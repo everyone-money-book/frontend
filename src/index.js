@@ -3,12 +3,19 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from 'react-router-dom';
+
+import {Provider} from 'react-redux';
+import store from './redux/configStore'
+
+import { ConnectedRouter } from 'connected-react-router'; //스토어 history 사용하려고
+import { history } from './redux/configStore'; //스토어 history 사용하려고
 
 ReactDOM.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
+  <Provider store={store}>
+    <ConnectedRouter history={history}>
+      <App />
+    </ConnectedRouter>
+  </Provider>,
   document.getElementById('root')
 );
 
