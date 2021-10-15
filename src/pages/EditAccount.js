@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { useHistory, useParams } from "react-router-dom";
 
-import { deleteContents, updateContents } from "../redux/modules/contents";
+import { contentsActions } from "../redux/modules/contents";
 
 const EditAccount = (props) => {
   // const { recordId } = props;
@@ -50,7 +50,7 @@ const EditAccount = (props) => {
       contents: contents,
     };
     console.log(updateData);
-    dispatch(updateContents(updateData));
+    dispatch(contentsActions.updateContents(updateData));
     history.goBack();
   };
 
@@ -114,7 +114,7 @@ const EditAccount = (props) => {
               padding="12px 0"
               radius="4px"
               onClick={(e) => {
-                dispatch(deleteContents(moneybook_idx));
+                dispatch(contentsActions.deleteContents(moneybook_idx));
                 history.replace("/");
               }}
             >

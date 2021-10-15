@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { createContents } from "../redux/modules/contents";
+// import { createContents } from "../redux/modules/contents";
 import { useHistory } from "react-router";
 import Grid from "../elements/Grid";
 import Text from "../elements/Text";
@@ -10,8 +10,10 @@ import styled from "styled-components";
 import DatePicker from "react-datepicker";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_orange.css";
-
 import "react-datepicker/dist/react-datepicker.css";
+
+import { contentsActions } from '../redux/modules/contents';
+
 // import { useForm } from 'react-hook-form';
 const AddAccount = (props) => {
   const dispatch = useDispatch();
@@ -28,24 +30,22 @@ const AddAccount = (props) => {
   const [category, setCategory] = useState("");
   const [cost, setCost] = useState("");
   const [contents, setContents] = useState("");
+  let accDate = startDate.split('T')[0];
+
   const recordAccount = () => {
     dispatch(
-      createContents({
+      contentsActions.createContentsAPI({
         id: 1,
-        date: startDate,
+        date: accDate,
         category: category,
         cost,
         contents,
         title: `${category} ${contents} ${cost}`,
       })
     );
-    history.goBack();
-    console.log(startDate, category, cost, contents);
+    console.log(accDate, category, cost, contents);
   };
 
-  const { setDateTime } = props;
-  const containerRef = useRef();
-  const container = containerRef.current;
 
   return (
     <React.Fragment>
@@ -79,12 +79,14 @@ const AddAccount = (props) => {
             /> */}
 
             <Input
+              type="datetime-local"
               placeholder="예시) 2021-10-15"
               width="360px"
               padding="10px 0"
               onChange={(e) => {
                 setStartDate(e.target.value);
               }}
+
             />
           </Grid>
           <Grid is_flex padding="16px 0">
