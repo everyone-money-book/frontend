@@ -14,7 +14,7 @@ const Login = (props) => {
       window.alert("아이디와 비밀번호를 입력해주세요.");
       return;
     }
-
+    
     dispatch(userActions.setLoginDB(userid, pwd));
   };
   return (
@@ -37,8 +37,8 @@ const Login = (props) => {
         <Button onClick={Login}>로그인하기</Button>
       </Container>
       <Container>
-        <Button style={{ background: "#f9e000" }}>카카오톡 로그인</Button>
-        <Button>회원가입하기</Button>
+        {/* <Button style={{ background: "#f9e000" }}>카카오톡 로그인</Button> */}
+        <Button style={{marginTop: '-100px', backgroundColor: '#e9ecef'}}>회원가입하기</Button>
       </Container>
     </Box>
   );
@@ -79,7 +79,10 @@ const Button = styled.button`
   margin: 10px 0px;
   border-width: 0px;
   border-radius: 10px;
+  background-color: #ffeecc;
 `;
 
-const Word = styled.h1``;
+const Word = styled.h1`
+  font-family: "Black And White Picture", sans-serif;
+`;
 export default Login;

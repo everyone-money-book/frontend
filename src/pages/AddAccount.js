@@ -30,6 +30,10 @@ const AddAccount = (props) => {
   const [category, setCategory] = useState("");
   const [cost, setCost] = useState("");
   const [contents, setContents] = useState("");
+  // let accDate = startDate.split('T')[0];
+  // console.log('날짜표시',startDate)
+  // console.log('날짜나누기',accDate);
+
   const recordAccount = () => {
     dispatch(
       contentsActions.createContentsAPI({
@@ -55,30 +59,7 @@ const AddAccount = (props) => {
         <TextBox>
           <Grid is_flex>
             <Text>일시</Text>
-            {/* <Flatpickr
-              ref={date_Ref}
-              // data-enable-time
-              data-able-time
-              value={date}
-              onChange={(date) => {
-                setStartDate(date.flatpickr.selectedDates[0].toUTCString());
-              }}
-            /> */}
-
-            {/* <div ref={containerRef}>
-              <Flatpickr
-                appendTo={container}
-                onChange={(date) => setStartDate(date)}
-                enableTime={false}
-                dateFormat={"Y-m-d"}
-              />
-            </div> */}
-            {/* <DatePicker
-              format="yyyy-MM-dd"
-              selected={startDate}
-              onChange={(date) => setStartDate(date)}
-            /> */}
-
+            
             <Input
               placeholder="예시) 2021-10-15"
               width="360px"
@@ -107,6 +88,7 @@ const AddAccount = (props) => {
           <Grid is_flex padding="16px 0">
             <Text>지출액</Text>
             <Input
+              type="number"
               width="360px"
               padding="10px 0"
               onChange={(e) => {
@@ -126,6 +108,7 @@ const AddAccount = (props) => {
           </Grid>
           <Grid>
             <Button
+              bg="#f9e000"
               position
               width="160px"
               margin="20px 0 0 0"

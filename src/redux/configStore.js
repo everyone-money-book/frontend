@@ -1,13 +1,3 @@
-// import {createStore, combineReducers} from "redux";
-// import contents from "./modules/contents"
-
-// const rootReducer = combineReducers({contents});
-
-// const store = createStore(rootReducer);
-
-// export default store;
-
-
 import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
 import { createBrowserHistory } from "history";

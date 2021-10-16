@@ -1,41 +1,77 @@
-import React from 'react'
-import FullCalendar from '@fullcalendar/react' // must go before plugins
-import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import styled from 'styled-components';
+import React from "react";
+import FullCalendar from "@fullcalendar/react"; // must go before plugins
+import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import styled from "styled-components";
 import Button from "../elements/Button";
 import { useHistory, Link, useParams } from "react-router-dom";
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from "react-redux";
+import { contentsActions } from "../redux/modules/contents";
+import user from "../redux/modules/user";
+import Permit from '../shared/Permit';
 
 const Calendar = (props) => {
-  const dispatch  = useDispatch();
+  // const {history} = props;
+
+  const dispatch = useDispatch();
   const history = useHistory();
- // const params = useParams();
- // const list_index = params.recordId;
-  const moneybook_list = useSelector((state) => state.contents.list);
+  // const params = useParams();
+  // const list_index = params.recordId;
   //console.log(list_index);
 
+  // 가계부 리스트 가져오기
+  const moneybook_list = useSelector((state) => state.contents.list);
+  console.log("달력리스트", moneybook_list);
 
-  
+  // 유저 이름 가져오기
+  // const me = useSelector((state) => state.user.user.username);
+  // let cloned = Object.assign({}, me);
+  // console.log("usernameState", me.username);
+
+  let cloned = JSON.parse(JSON.stringify(useSelector((state) => state.user.user.username)));
+  console.log("cloned.username", cloned);
+
+  // 날짜 구하기
+  let today = new Date();
+
+  let year = today.getFullYear();
+  let month = ("0" + (today.getMonth() + 1)).slice(-2);
+  let day = ("0" + today.getDate()).slice(-2);
+
+  let dateString = year + "-" + month + "-" + day;
+
+  console.log("날짜 구하기", dateString);
+
+  // user.username
+
+  const date = dateString;
+  const category = `all`;
+  const username = 'member2';
+  // console.log("123123123123213",username)
+  // res.data.object.username
+  React.useEffect(() => {
+    dispatch(contentsActions.getContentsAPI(date, category, cloned));
+  }, []);
+
   const foo = (arg) => {
     console.log(arg);
-    const title = arg.event._def.title
+    const title = arg.event._def.title;
 
-    const account = moneybook_list.find(event => {
-      return event.title === title
-    })
-    console.log(account.id);
-    history.push(`/edit/${account.id}`);
-  }
-
+    const account = moneybook_list.find((event) => {
+      return event.title === title;
+    });
+    const id = arg.event._def.extendedProps.recordId;
+    console.log(id);
+    history.push(`/edit/${id}`);
+  };
 
   const allEvent = moneybook_list.map((list, idx) => {
     return {
       title: list.title,
       date: list.date,
-      id: list.id
-    }
+      id: list.id,
+    };
   });
   console.log(allEvent);
 
@@ -47,22 +83,22 @@ const Calendar = (props) => {
     // setId(id);
     // setTitle(title);
     // console.log(id, title)
-    history.push('/edit/'+id)
-  }
+    history.push("/edit/" + id);
+  };
   return (
     <Container>
       <FullCalendar
-        plugins={[ dayGridPlugin, timeGridPlugin, interactionPlugin ]}
+        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
-        height= "100%"
+        height="100%"
         expandRows="true"
         locale="ko"
-        headerToolbar= {{
-          left: '',
-          center: 'title',
-          right: 'prev,today,next',
+        headerToolbar={{
+          left: "",
+          center: "title",
+          right: "prev,today,next",
         }}
-        dayMaxEvents= "true"
+        dayMaxEvents="true"
         events={moneybook_list}
         eventClick={foo}
         //eventClick={(e) => openPage(e.event._def.extendedProps.recordId)}
@@ -74,36 +110,38 @@ const Calendar = (props) => {
         //   meridiem: "short",
         // }}
       />
+      <Permit>
       <Link to="/add">
         <AddButton>+</AddButton>
       </Link>
+      </Permit>
     </Container>
-  )
-}
+  );
+};
 const Container = styled.div`
   height: 90%;
-  width : 90%;
-    a {
-      cursor: pointer;
-    }
+  width: 90%;
+  a {
+    cursor: pointer;
+  }
   .fc-col-header-cell {
-    background-color: #CED4DA;
+    background-color: #ced4da;
     color: #fff;
     &.fc-day-sat {
-      background-color: #A5D8FF;
+      background-color: #a5d8ff;
     }
     &.fc-day-sun {
-      background-color: #FFA8A8;
+      background-color: #ffa8a8;
     }
   }
-`
+`;
 const AddButton = styled.button`
   position: fixed;
   right: 16px;
   bottom: 50px;
   width: 60px;
   height: 60px;
-  background-color: #F9E000;
+  background-color: #f9e000;
   box-sizing: border-box;
   font-weight: 800;
   font-size: 38px;
@@ -117,48 +155,4 @@ const AddButton = styled.button`
     cursor: pointer;
   }
 `;
-export default Calendar
-// import FullCalendar from '@fullcalendar/react';
-// import dayGridPlugin from '@fullcalendar/daygrid';
-// import timeGridPlugin from '@fullcalendar/timegrid';
-// import interactionPlugin from '@fullcalendar/interaction';
-// const events = [
-//   {
-//     id: 1,
-//     title: 'event 1',
-//     start: '2021-06-14T10:00:00',
-//     end: '2021-06-14T12:00:00',
-//   },
-//   {
-//     id: 2,
-//     title: 'event 2',
-//     start: '2021-06-16T13:00:00',
-//     end: '2021-06-16T18:00:00',
-//   },
-//   { id: 3, title: 'event 3', start: '2021-06-17', end: '2021-06-20' },
-// ];
-// function FullCalendarApp() {
-//   return (
-//     <div className="App">
-//       <FullCalendar
-//         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-//         initialView="dayGridMonth"
-//         headerToolbar={{
-//           center: 'dayGridMonth,timeGridWeek,timeGridDay new',
-//         }}
-//         customButtons={{
-//           new: {
-//             text: 'new',
-//             click: () => console.log('new event'),
-//           },
-//         }}
-//         events={events}
-//         eventColor="red"
-//         nowIndicator
-//         dateClick={(e) => console.log(e.dateStr)}
-//         eventClick={(e) => console.log(e.event.id)}
-//       />
-//     </div>
-//   );
-// }
-// export default FullCalendarApp;
+export default Calendar;
