@@ -6,6 +6,7 @@ const GET = "GET";
 const CREATE = "CREATE";
 const UPDATE = "UPDATE";
 const DELETE = "DELETE";
+const GET_USERINFO = "GET_USERINFO";
 
 const getCalendar = createAction(GET, (post_list) => ({post_list}));
 const createContents = createAction(CREATE, (contents) => ({ contents }));
@@ -16,7 +17,7 @@ const updateContents = createAction(UPDATE, (updateData, contents_index) => ({
 const deleteContents = createAction(DELETE, (contents_index) => ({
   contents_index,
 }));
-const getmydate = createAction(GET, (post_list, money)  => ({post_list, money}));
+const createMyInfo = createAction(GET_USERINFO, (myInfo) => ({ myInfo }));
 
 const initialState = {
   list: [
@@ -63,6 +64,10 @@ const initialState = {
     //   backgroundColor: "#FFE066",
     // },
   ],
+  myInfo: {
+    leftmoney: "",
+    mydate: "",
+  },
 };
 
 
@@ -215,6 +220,10 @@ export default handleActions(
     [DELETE]: (state, action) =>
       produce(state, (draft) => {
         draft.list.filter((p) => p.id !== action.payload.contents_index);
+      }),
+    [GET_USERINFO]: (state, action) =>
+      produce(state, (draft) => {
+        draft.myInfo = action.payload.myInfo;
       }),
   },
   initialState
