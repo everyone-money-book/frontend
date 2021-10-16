@@ -15,20 +15,35 @@ const EditAccount = (props) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const params = useParams();
-  console.log(params);
+  console.log("params", params);
   const list_index = params.id;
-  console.log(list_index);
+  console.log("list_index", list_index);
   const moneybook_list = useSelector((state) => state.contents.list);
+  console.log("moneybook_list", moneybook_list);
   const moneybook_idx = moneybook_list.findIndex(
     (p) => p.id === parseInt(list_index)
   );
-  const moneybook = moneybook_list[moneybook_idx];
-  console.log(moneybook);
+  console.log("moneybook_idx", moneybook_idx)
+  // const moneybook = moneybook_list[0];
+  let moneybook = {}
+  for (let i = 0; i < moneybook_list.length; i++) {
+    console.log(moneybook_list[i].recordId)
+    console.log("list_index", list_index)
+    if (moneybook_list[i].recordId == list_index) {
+      moneybook = moneybook_list[i];
+      
+    }
+  }
+  console.log("moneybook", moneybook);
+  // const cost = moneybook.cost
+  // console.log(cost)
+  
 
-  const [contents, setContents] = React.useState("");
-  const [cost, setCost] = React.useState('');
-  console.log(cost);
-  const [category, setCategory] = React.useState('');
+  const [contents, setContents] = React.useState(moneybook.contents);
+  const [cost, setCost] = React.useState(moneybook.cost);
+  const [category, setCategory] = React.useState(moneybook.category);
+  console.log('>>>>>>>>>>>',cost)
+ 
 
   // const updateAccount = () => {
   //   dispatch(
@@ -63,7 +78,7 @@ const EditAccount = (props) => {
             <Text>카테고리</Text>
             <select
               style={{ width: "360px", padding: "10px 0", borderRadius: "4px" }}
-              value={moneybook.category}
+              value={category}
               onChange={(e) => {
                 setCategory(e.target.value);
               }}
@@ -81,7 +96,7 @@ const EditAccount = (props) => {
             <Input
               width="360px"
               padding="10px 0"
-              value={moneybook.cost}
+              value={cost}
               onChange={(e) => {
                 setCost(e.target.value);
               }}
@@ -92,7 +107,7 @@ const EditAccount = (props) => {
             <Input
               width="360px"
               padding="10px 0"
-              value={moneybook.contents}
+              value={contents}
               onChange={(e) => {
                 setContents(e.target.value);
               }}
@@ -114,7 +129,8 @@ const EditAccount = (props) => {
               padding="12px 0"
               radius="4px"
               onClick={(e) => {
-                dispatch(contentsActions.deleteContents(moneybook_idx));
+                dispatch(contentsActions.deleteContentsAPI(list_index));
+                console.log("onClickevent", list_index)
                 history.replace("/");
               }}
             >

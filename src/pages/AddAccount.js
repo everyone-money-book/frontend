@@ -80,11 +80,11 @@ const AddAccount = (props) => {
 
             <Input
               type="datetime-local"
-              placeholder="예시) 2021-10-15"
+              // placeholder="예시) 2021-10-15"
               width="360px"
               padding="10px 0"
               onChange={(e) => {
-                setStartDate(e.target.value);
+                setStartDate(accDate);
               }}
 
             />
@@ -108,6 +108,7 @@ const AddAccount = (props) => {
           <Grid is_flex padding="16px 0">
             <Text>지출액</Text>
             <Input
+              type="number"
               width="360px"
               padding="10px 0"
               onChange={(e) => {

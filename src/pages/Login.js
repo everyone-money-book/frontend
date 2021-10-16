@@ -79,7 +79,10 @@ const Button = styled.button`
   margin: 10px 0px;
   border-width: 0px;
   border-radius: 10px;
+  background-color: #ffeecc;
 `;
 
-const Word = styled.h1``;
+const Word = styled.h1`
+  font-family: "Black And White Picture", sans-serif;
+`;
 export default Login;

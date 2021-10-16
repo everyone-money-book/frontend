@@ -17,40 +17,63 @@ const Signup = (props) => {
   const [job, setJob] = React.useState("");
   const [salary, setSalary] = React.useState("");
 
-  const _Signup = () => {
-    
-    if (username === "") {
-      alert("please enter your username");
+  const [errorMessage, setErrorMessage] = React.useState("");
+  const [checkArr, setCheckArr] = React.useState(Array(7).fill(false));
 
+  const setError = (index, message) => {
+    setErrorMessage(message);
+    let tempArr = Array(7).fill(false);
+    tempArr[index] = true;
+    setCheckArr(tempArr);
+  };
+
+  const _Signup = () => {
+    // 에러 메시지 초기화
+    setCheckArr(Array(7).fill(false));
+    setErrorMessage("");
+
+    if (username === "") {
+      setError(0, "유저네임을 입력하세요");
+      return;
+    }
+    if (!username.match(/^(?=.*?[a-z])(?=.*?[0-9]).{4,}$/)) {
+      setError(0, "소문자/숫자 포함 4글자 이상 입력해주세요");
       return;
     }
     if (password === "") {
-      alert("please enter your password");
+      setError(1, "비밀번호를 입력하세요");
+      return;
+    }
+    if (!password.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/)) {
+      setError(
+        1,
+        "패스워드는 숫자 1개, 대문자 1개, 소문자 1개 이상을 포함하는 6~20자 이내여야 합니다"
+      );
       return;
     }
     if (pwd_check === "") {
-      alert("please enter your password");
+      setError(2, "비밀번호를 입력해주세요");
       return;
     }
-    if (sex === "") {
-      alert("please enter your gender");
-      return;
-    }
-    if (age === "") {
-      alert("please enter your age");
-      return;
-    }
-    if (job === "") {
-      alert("please enter your job");
-      return;
-    }
-    if (salary === "") {
-      alert("please enter your salary");
+    if (password !== pwd_check) {
+      setError(2, "비밀번호가 일치하지 않습니다");
       return;
     }
 
-    if (password !== pwd_check) {
-      alert("please check the password one more");
+    if (sex === "") {
+      setError(3, "성별을 선택해주세요");
+      return;
+    }
+    if (age === "") {
+      setError(4, "나이를 입력해주세요");
+      return;
+    }
+    if (job === "") {
+      setError(5, "직업을 입력해주세요");
+      return;
+    }
+    if (salary === "") {
+      setError(6, "연봉을 입력해주세요");
       return;
     }
 
@@ -60,75 +83,88 @@ const Signup = (props) => {
   
   return (
     <Box>
-      <H1>Join</H1>
-
-      <Input
-        label="username"
-        placeholder="please enter your username."
-        value={username}
-        onChange={(e) => {
-          setUsername(e.target.value);
-        }}
-      />
-
+      <H1>회원가입</H1>
+      <Div>
+        <Input
+          class="fas fa-user"
+          label="username"
+          placeholder="유저네임을 입력해주세요."
+          value={username}
+          onChange={(e) => {
+            setUsername(e.target.value);
+          }}
+        />
+        {/* <IdCheck onClick={() => alert("중복된 아이디 사용중!")}>
+          중복확인
+        </IdCheck> */}
+      </Div>
+      {checkArr[0] && <ErrorMessage>{errorMessage}</ErrorMessage>}
       <Input
         label="password"
         type="password"
-        placeholder="please enter your password."
+        placeholder="비밀번호를 입력해주세요."
         value={password}
         onChange={(e) => {
           setPassword(e.target.value);
         }}
       />
-
+      {checkArr[1] && <ErrorMessage>{errorMessage}</ErrorMessage>}
       <Input
-        label="password"
+        label="pwd_check"
         type="password"
-        placeholder="please check the password"
+        placeholder="비밀번호를 다시 입력해주세요"
         value={pwd_check}
         onChange={(e) => {
           setPwdCheck(e.target.value);
         }}
       />
+      {checkArr[2] && <ErrorMessage>{errorMessage}</ErrorMessage>}
 
-      <Input
+      <Select
         label="sex"
-        placeholder="please enter your jender."
         value={sex}
         onChange={(e) => {
           setSex(e.target.value);
         }}
-      />
-
+      >
+        <option value="" disabled>
+          성별을 선택해주세요
+        </option>
+        <option value="male">남자</option>
+        <option value="female">여자</option>
+      </Select>
+      {checkArr[3] && <ErrorMessage>{errorMessage}</ErrorMessage>}
       <Input
         label="age"
-        placeholder="please enter your age."
+        type="number"
+        placeholder="나이를 입력해주세요."
         value={age}
         onChange={(e) => {
           setAge(e.target.value);
         }}
       />
-
+      {checkArr[4] && <ErrorMessage>{errorMessage}</ErrorMessage>}
       <Input
         label="job"
-        placeholder="please enter your job."
+        placeholder="직업을 입력해주세요."
         value={job}
         onChange={(e) => {
           setJob(e.target.value);
         }}
       />
-
+      {checkArr[5] && <ErrorMessage>{errorMessage}</ErrorMessage>}
       <Input
         label="salary"
-        placeholder="please enter your salary."
+        type="number"
+        placeholder="연봉을 입력해주세요."
         value={salary}
         onChange={(e) => {
           setSalary(e.target.value);
         }}
       />
-
+      {checkArr[6] && <ErrorMessage>{errorMessage}</ErrorMessage>}
       <Button text="회원가입하기" onClick={_Signup}>
-        Join
+        회원가입 하기
       </Button>
     </Box>
   );
@@ -156,11 +192,32 @@ const Box = styled.div`
 //   align-items: center;
 // `;
 
+const ErrorMessage = styled.div`
+  font-size: 0.8rem;
+  color: red;
+`;
+
 const Input = styled.input`
   width: 300px;
+  height: 40px;
+  margin: 10px 0px;
+  border-radius: 10px;
+  border: 3px solid pink;
+  background-color: rgb(232, 240, 254);
+  ::-webkit-outer-spin-button,
+  ::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+`;
+
+const Select = styled.select`
+  width: 310px;
   height: 50px;
   margin: 10px 0px;
   border-radius: 10px;
+  border: 3px solid pink;
+  background-color: rgb(232, 240, 254);
 `;
 
 const Button = styled.button`
@@ -169,10 +226,29 @@ const Button = styled.button`
   margin: 10px 0px;
   border-width: 0px;
   border-radius: 10px;
+  background-color: #ffeecc;
+  cursor: pointer;
 `;
 
 const H1 = styled.h1`
   font-size: 32px;
+  color: #222831;
+  font-family: "Black And White Picture", sans-serif;
 `;
 
+const IdCheck = styled.button`
+  width: 70px;
+  height: 50px;
+  margin-left: 20px;
+  margin-top: 10px;
+  border-radius: 10px;
+  background-color: #ffeecc;
+  cursor: pointer;
+`;
+
+const Div = styled.div`
+  width: 400px;
+  display: flex;
+  padding-left: 90px;
+`;
 export default Signup;
